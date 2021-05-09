@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Petition} from '../../models/petition.model';
 
 @Component({
   selector: 'app-preview-petition',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./preview-petition.component.scss']
 })
 export class PreviewPetitionComponent implements OnInit {
+
+  @Input() petition: Petition;
 
   constructor() { }
 
