@@ -1,0 +1,9 @@
+<img *ngIf="loggedIn" src="{{ user.photoUrl }}">
+<div *ngIf="loggedIn">
+  <h4>{{ user.name }}</h4>
+  <p>{{ user.email }}</p>
+</div>
+
+<div><button (click)="signInWithGoogle()">Sign IN with Google</button></div>
+<div><button (click)="signInWithFB()">Sign IN with facebook</button></div>
+<div><button (click)="signOut()">Sign OUT</button></div>

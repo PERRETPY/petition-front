@@ -39,7 +39,6 @@ export class PetitionService {
   }
 
 
-
   emitCurrentPetition(): void {
     let currentPetitionCopy: Petition;
     // @ts-ignore
