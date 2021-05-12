@@ -16,6 +16,7 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider, SocialLoginModule, SocialAuthServiceConfig
 } from 'angularx-social-login';
+import {AuthenticatorService} from '../services/authenticator.service';
 
 
 const appRoutes: Routes = [
@@ -60,7 +61,8 @@ const appRoutes: Routes = [
           }
         ]
       } as SocialAuthServiceConfig,
-    }
+    },
+    AuthenticatorService
   ],
   bootstrap: [AppComponent]
 })

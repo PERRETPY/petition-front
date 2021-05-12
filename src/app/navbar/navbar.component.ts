@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {SocialAuthService, SocialUser} from 'angularx-social-login';
+import {Subscription} from 'rxjs';
+import {AuthenticatorService} from '../../services/authenticator.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,8 +11,28 @@ import { Component, OnInit } from '@angular/core';
 
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  user: SocialUser;
+  userSubscription: Subscription;
+
+
+  constructor(private authenticatorService: AuthenticatorService) { }
 
   ngOnInit(): void {
+    this.userSubscription = this.authenticatorService.userSubject.subscribe(
+      (user: any) => {
+        this.user = user;
+      }
+    );
+    this.authenticatorService.emitUserSubject();
   }
+
+
+  printUser(): void {
+    if (this.user != null) {
+      console.log(this.user);
+    }else {
+      console.log('Not connected');
+    }
+  }
+
 }

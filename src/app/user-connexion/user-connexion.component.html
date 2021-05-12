@@ -1,9 +1,7 @@
-<img *ngIf="loggedIn" src="{{ user.photoUrl }}">
-<div *ngIf="loggedIn">
-  <h4>{{ user.name }}</h4>
-  <p>{{ user.email }}</p>
+<div class="google-btn" (click)="signInWithGoogle()">
+  <div class="google-icon-wrapper">
+    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+  </div>
+  <p class="btn-text"><b>Se connecter avec google</b></p>
 </div>
 
-<div><button (click)="signInWithGoogle()">Sign IN with Google</button></div>
-<div><button (click)="signInWithFB()">Sign IN with facebook</button></div>
-<div><button (click)="signOut()">Sign OUT</button></div>

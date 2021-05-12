@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
+import {AuthenticatorService} from '../../services/authenticator.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-user-connexion',
@@ -9,32 +11,23 @@ import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUse
 })
 export class UserConnexionComponent implements OnInit {
   user: SocialUser;
-  loggedIn: boolean;
 
-  constructor(private authService: SocialAuthService) { }
+  constructor(private authService: SocialAuthService,
+              private authenticatorService: AuthenticatorService) { }
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    console.log('Hello : ' + this.user.email);
+  ngOnInit(): void {
+    this.authenticatorService.userSubject.subscribe(user => {
+      this.user = user;
+    });
+    this.authenticatorService.emitUserSubject();
   }
 
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  signInWithGoogle(): void {
+    this.authenticatorService.signInWithGoogle();
   }
 
   signOut(): void {
-    this.authService.signOut();
-    console.log('ByBy');
+    this.authenticatorService.signOut();
   }
 
-  refreshToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
-  }
-
-  ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-    });
-  }
 }
