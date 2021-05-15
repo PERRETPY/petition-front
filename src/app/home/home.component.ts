@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PetitionService} from '../../services/petition.service';
 import {Subscription} from 'rxjs';
+import {Petition} from '../../models/petition.model';
 
 @Component({
   selector: 'app-home',
@@ -9,23 +10,13 @@ import {Subscription} from 'rxjs';
 })
 export class HomeComponent implements OnInit {
 
-  test: string;
+  test: Petition[];
   testSubscription: Subscription;
 
   constructor(private petitionService: PetitionService) { }
 
   ngOnInit(): void {
-    this.testSubscription = this.petitionService.testSubject.subscribe(
-      (test: any) => {
-        console.log(test);
-        this.test = test;
-      }
-    );
-    this.petitionService.emitTop100Petition();
-    this.petitionService.petitionSigned();
-  }
-
-  testFunction(): void {
+    // this.test = this.petitionService.getPetitionSigned();
   }
 
 }

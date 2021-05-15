@@ -14,8 +14,6 @@ export class PetitionComponent implements OnInit {
   @Input() idPetition: string;
   @Input() petition: Petition;
 
-  public test: boolean = false;
-
   petitionSubscription: Subscription;
 
   constructor(private petitionService: PetitionService,
@@ -34,7 +32,10 @@ export class PetitionComponent implements OnInit {
     );
     this.petitionService.emitCurrentPetition();
     this.petitionService.getPetitionById(this.idPetition);
-    this.test = true;
+  }
+
+  signPetition(): void {
+    this.petitionService.signPetition(this.idPetition);
   }
 
 }

@@ -37,7 +37,11 @@ export class AuthenticatorService {
   }
 
   refreshGoogleToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID).then(
+      response => {
+        this.saveUser();
+      }
+    );
   }
 
   emitUserSubject(): void {

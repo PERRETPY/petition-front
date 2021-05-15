@@ -1,10 +1,28 @@
-<nav>
-  <ul>
-    <li><a href="#">Lancer une pétition</a></li>
-    <li><a href="#">Mes pétitions</a></li>
-    <li><a href="#">Rechercher</a></li>
-    <li><a href="#">Se connecter</a></li>
-  </ul>
-</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Pétition</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Acceuil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Poster une pétition</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Mes pétitions</a>
+        </li>
+      </ul>
+    </div>
 
-<div><button (click)="printUser()">Print User</button></div>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Mon compte</a>
+      </li>
+    </ul>
+  </div>
+
+</nav>

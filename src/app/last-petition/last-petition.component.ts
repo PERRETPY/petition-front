@@ -26,4 +26,13 @@ export class LastPetitionComponent implements OnInit {
     this.petitionService.emitTop100Petition();
     this.petitionService.getTop100();
   }
+
+  getNextTop100(): void {
+    this.petitionService.getNextTop100();
+  }
+
+  onScroll(): void {
+    console.log('scrolled!!');
+    this.getNextTop100();
+  }
 }

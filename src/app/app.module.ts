@@ -17,11 +17,15 @@ import {
   FacebookLoginProvider, SocialLoginModule, SocialAuthServiceConfig
 } from 'angularx-social-login';
 import {AuthenticatorService} from '../services/authenticator.service';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import { NewPetitionComponent } from './new-petition/new-petition.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 const appRoutes: Routes = [
   { path: 'petition/:id',  component: PetitionComponent },
   { path: 'connection',  component: UserConnexionComponent },
+  { path: 'new-petition',  component: NewPetitionComponent },
   { path: '',  component: HomeComponent }
 ];
 
@@ -34,13 +38,16 @@ const appRoutes: Routes = [
     PetitionComponent,
     LastPetitionComponent,
     HomeComponent,
-    UserConnexionComponent
+    UserConnexionComponent,
+    NewPetitionComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    SocialLoginModule
+    SocialLoginModule,
+    InfiniteScrollModule,
+    ReactiveFormsModule
   ],
   providers: [
     PetitionService,
