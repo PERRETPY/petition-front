@@ -20,13 +20,16 @@ import {AuthenticatorService} from '../services/authenticator.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import { NewPetitionComponent } from './new-petition/new-petition.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { MyAccountComponent } from './my-account/my-account.component';
+import {AuthGuard} from '../services/auth-guard.service';
 
 
 const appRoutes: Routes = [
-  { path: 'petition/:id',  component: PetitionComponent },
-  { path: 'connection',  component: UserConnexionComponent },
-  { path: 'new-petition',  component: NewPetitionComponent },
-  { path: '',  component: HomeComponent }
+  { path: 'petition/:id', component: PetitionComponent },
+  { path: 'connection', component: UserConnexionComponent },
+  { path: 'account', canActivate: [AuthGuard], component: MyAccountComponent },
+  { path: 'new-petition', canActivate: [AuthGuard], component: NewPetitionComponent },
+  { path: '', component: HomeComponent }
 ];
 
 
@@ -39,7 +42,8 @@ const appRoutes: Routes = [
     LastPetitionComponent,
     HomeComponent,
     UserConnexionComponent,
-    NewPetitionComponent
+    NewPetitionComponent,
+    MyAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +73,8 @@ const appRoutes: Routes = [
         ]
       } as SocialAuthServiceConfig,
     },
-    AuthenticatorService
+    AuthenticatorService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

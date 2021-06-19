@@ -3,6 +3,8 @@ import {Petition} from '../../models/petition.model';
 import {PetitionService} from '../../services/petition.service';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {AuthenticatorService} from '../../services/authenticator.service';
+import {SocialUser} from 'angularx-social-login';
 
 @Component({
   selector: 'app-petition',
@@ -16,11 +18,15 @@ export class PetitionComponent implements OnInit {
 
   petitionSubscription: Subscription;
 
+  user: SocialUser;
+  userSubscription: Subscription;
+
   constructor(private petitionService: PetitionService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private authenticatorService: AuthenticatorService) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params.id;
     this.idPetition = id;
     console.log('ID Petition ' + this.idPetition);
 
@@ -32,6 +38,13 @@ export class PetitionComponent implements OnInit {
     );
     this.petitionService.emitCurrentPetition();
     this.petitionService.getPetitionById(this.idPetition);
+
+    this.userSubscription = this.authenticatorService.userSubject.subscribe(
+      (user: any) => {
+        this.user = user;
+      }
+    );
+    this.authenticatorService.emitUserSubject();
   }
 
   signPetition(): void {

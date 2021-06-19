@@ -21,6 +21,11 @@ export class AuthenticatorService {
     }
   }
 
+  getToken(): string {
+    this.refreshGoogleToken();
+    return this.user.idToken;
+  }
+
   signInWithGoogle(): void {
     console.log('Sign In with Google !');
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(
@@ -30,21 +35,22 @@ export class AuthenticatorService {
     );
   }
 
-
   signOut(): void {
     this.authService.signOut();
     this.destroyUser();
   }
 
-  refreshGoogleToken(): void {
-    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID).then(
+  refreshGoogleToken(): Promise<void> {
+    return this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID).then(
       response => {
         this.saveUser();
+        console.log('TOKEN : ' + this.socialUser.idToken);
       }
     );
   }
 
   emitUserSubject(): void {
+
     const userCopy = this.user;
     this.userSubject.next(userCopy);
   }

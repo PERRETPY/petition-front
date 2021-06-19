@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PetitionPost} from '../../models/petitionPost.model';
+import {PetitionService} from '../../services/petition.service';
 
 @Component({
   selector: 'app-new-petition',
@@ -11,27 +12,35 @@ export class NewPetitionComponent implements OnInit {
 
   petitionForm: FormGroup;
 
-  tags: string[] = [
-    'Économie',
-    'Société',
-    'Politique',
-    'Animaux',
-    'Enfant',
-    'Éducation'
-  ];
+  tags: string[] = [];
 
-  constructor(private formBuilder: FormBuilder) { }
+  maxLengthDescription = 1000;
+  maxLengthTags = 3;
+
+  moreTags = true;
+
+  constructor(private formBuilder: FormBuilder,
+              private petitionService: PetitionService) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.tags = [
+      'Économie',
+      'Société',
+      'Politique',
+      'Animaux',
+      'Enfant',
+      'Éducation'
+    ];
   }
 
   initForm(): void {
     this.petitionForm = this.formBuilder.group({
       title: ['', Validators.required],
-      description: ['', Validators.required],
+      description: ['', [Validators.required, Validators.maxLength(this.maxLengthDescription)]],
       tags: this.formBuilder.array([])
     });
+
   }
 
   onSubmitForm(): void{
@@ -41,7 +50,8 @@ export class NewPetitionComponent implements OnInit {
       formValue.description,
       formValue.tags ? formValue.tags : []
     );
-    console.log(newPetition);
+    this.petitionService.postPetition(newPetition);
+    console.log(this.petitionForm.controls['description'].value.length);
   }
 
   getTags(): FormArray {
@@ -49,12 +59,22 @@ export class NewPetitionComponent implements OnInit {
   }
 
   onAddTag(): void {
-    const newTagsControl = this.formBuilder.control('', Validators.required);
-    this.getTags().push(newTagsControl);
+    if (this.getTags().length < this.maxLengthTags) {
+      this.moreTags = true;
+      const newTagsControl = this.formBuilder.control('', Validators.required);
+      console.log(this.tags.indexOf(newTagsControl.toString()));
+      this.getTags().push(newTagsControl);
+    }else {
+      this.moreTags = false;
+    }
+    if (this.getTags().length === this.maxLengthTags) {
+      this.moreTags = false;
+    }
   }
 
   onDeleteTag(i: number): void {
     this.getTags().removeAt(i);
+    this.moreTags = true;
   }
 
 }

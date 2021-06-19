@@ -7,10 +7,11 @@ import {SocialUser} from 'angularx-social-login';
 import {AuthenticatorService} from './authenticator.service';
 import {SignaturesModel} from '../models/signatures.model';
 import {newArray} from '@angular/compiler/src/util';
+import {PetitionPost} from '../models/petitionPost.model';
 
 @Injectable()
 export class PetitionService {
-  baseUrl = 'http://' + environment.server + '/_ah/api/petitionEndpoint/v1';
+  baseUrl = environment.server + '/_ah/api/petitionEndpoint/v1';
 
   top100Petition: Petition[];
   nextToken: string;
@@ -18,6 +19,12 @@ export class PetitionService {
 
   currentPetition: Petition;
   currentPetitionSubject = new Subject<Petition>();
+
+  signedPetition: Petition[];
+  signedPetitionSubject = new Subject<Petition[]>();
+
+  myPetition: Petition[];
+  myPetitionSubject = new Subject<Petition[]>();
 
   constructor(private httpClient: HttpClient, private authenticatorService: AuthenticatorService) { }
 
@@ -42,7 +49,6 @@ export class PetitionService {
           console.log('Erreur de chargement : ' + error);
         }
       );
-
   }
 
   getNextTop100(): void {
@@ -92,26 +98,48 @@ export class PetitionService {
       );
   }
 
-  getPetitionSigned(): Petition[] {
-    console.log('Hello from getPetitionSigned ! ');
-    let petitionSigned: Petition[] = [];
-    if (this.authenticatorService.user === null) {
-      console.log('You are not connected');
-    }else {
-      this.authenticatorService.refreshGoogleToken();
+  emitSignedPetition(): void {
+    const petition = this.signedPetition;
+    this.signedPetitionSubject.next(petition);
+  }
+
+  getPetitionSigned(): void {
+    this.httpClient
+      .get<any>(this.baseUrl + '/petitionSigned?access_token=' + this.authenticatorService.user.idToken)
+      .subscribe(
+        (response) => {
+          this.signedPetition = response.items;
+          this.emitSignedPetition();
+          console.log(response);
+        },
+        (error) => {
+          console.log('Erreur de chargement : ' + error);
+        }
+      );
+  }
+
+  emitMyPetition(): void {
+    const petition = this.myPetition;
+    this.myPetitionSubject.next(petition);
+  }
+
+  getMyPetition(): void {
+    this.authenticatorService.refreshGoogleToken().then(
+      responseRefresh => {
       this.httpClient
-        .get<any>(this.baseUrl + '/petitionSigned?access_token=' + this.authenticatorService.user.idToken)
+        .get<any>(this.baseUrl + '/mypetitions?access_token=' + this.authenticatorService.user.idToken)
         .subscribe(
           (response) => {
-            petitionSigned = response;
-            console.log('Chargement réussi ! : ');
+            this.myPetition = response.items;
+            this.emitMyPetition();
+            console.log(response);
           },
           (error) => {
             console.log('Erreur de chargement : ' + error);
           }
         );
-    }
-    return petitionSigned;
+      }
+    );
   }
 
   getUserSignedPetition(): SignaturesModel {
@@ -130,6 +158,8 @@ export class PetitionService {
     return signaturesResult;
   }
 
+
+  //FIXME déplacer dans le back PUT (User, idPetition)
   signPetition(petitionKey: string): void{
     if (this.authenticatorService.user != null) {
       this.authenticatorService.refreshGoogleToken();
@@ -139,6 +169,23 @@ export class PetitionService {
         .put<any>(this.baseUrl + '/signPetition/?access_token=' + this.authenticatorService.user.idToken, signaturesBloc)
         ;
     }
+  }
+
+  postPetition(petition: PetitionPost): Petition {
+    let newPetition: Petition = null;
+    this.httpClient
+      .post<Petition>(this.baseUrl + '/petition?access_token=' + this.authenticatorService.getToken() , petition)
+      .subscribe(
+        (response) => {
+          newPetition = response;
+          console.log('Response : ' + response);
+        },
+        (error) => {
+          console.log('Erreur de chargement : ' + error);
+        }
+      );
+    console.log('Petition from service : ' + petition);
+    return newPetition;
   }
 
 
