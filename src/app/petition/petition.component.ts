@@ -25,6 +25,9 @@ export class PetitionComponent implements OnInit {
   signedPetitionsSubscription: Subscription;
   alreadySigned: boolean;
 
+  signatory: any[];
+  signatorySubscription: Subscription;
+
   constructor(private petitionService: PetitionService,
               private route: ActivatedRoute,
               private authenticatorService: AuthenticatorService) { }
@@ -68,7 +71,13 @@ export class PetitionComponent implements OnInit {
     );
     this.authenticatorService.emitUserSubject();
 
-
+    this.signatorySubscription = this.petitionService.signatorySubject.subscribe(
+      (signatory: any[]) => {
+        this.signatory = signatory;
+      }
+    );
+    this.petitionService.emitSignatory();
+    this.petitionService.getSignatory(this.idPetition);
 
   }
 

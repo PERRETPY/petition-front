@@ -18,6 +18,9 @@ export class PetitionService {
   nextTokenTop100: string;
   petitionTop100Subject = new Subject<Petition[]>();
 
+  signatory: any[];
+  signatorySubject = new Subject<any[]>();
+
   searchPetition: Petition[];
   nextTokenSearch: string;
   petitionSearchSubject = new Subject<Petition[]>();
@@ -241,6 +244,26 @@ export class PetitionService {
         }
       );
     console.log('Petition from service : ' + JSON.stringify(petition));
+  }
+
+  emitSignatory(): void {
+    const sign = this.signatory;
+    this.signatorySubject.next(sign);
+  }
+
+  getSignatory(petitionId: string): void {
+    this.httpClient
+      .get<any>(this.baseUrl + '/signatory/' + petitionId)
+      .subscribe(
+        (response) => {
+          this.signatory = response.items;
+          this.emitSignatory();
+          console.log('Chargement réussi !');
+        },
+        (error) => {
+          console.log('Erreur de chargement : ' + error);
+        }
+      );
   }
 
 

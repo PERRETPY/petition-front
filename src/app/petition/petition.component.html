@@ -2,6 +2,10 @@
 <p>{{ petition.properties.description }}</p>
 <p>Créateur : {{ petition.properties.owner }}</p>
 <p *ngIf="alreadySigned">Vous avez signé cette pétition</p>
+<h4 style="text-align: left;">Liste des signataire : </h4>
+<ul *ngFor="let sign of signatory" class="list-group">
+  <li style="text-align: left;" class="list-group-item">{{ sign.name }}</li>
+</ul>
 
 
 <button *ngIf="user != null && !alreadySigned" (click)="signPetition()">Signer cette pétition</button>
