@@ -21,6 +21,10 @@ export class PetitionComponent implements OnInit {
   user: SocialUser;
   userSubscription: Subscription;
 
+  signedPetitions: Petition[];
+  signedPetitionsSubscription: Subscription;
+  alreadySigned: boolean;
+
   constructor(private petitionService: PetitionService,
               private route: ActivatedRoute,
               private authenticatorService: AuthenticatorService) { }
@@ -42,9 +46,30 @@ export class PetitionComponent implements OnInit {
     this.userSubscription = this.authenticatorService.userSubject.subscribe(
       (user: any) => {
         this.user = user;
+        if (user != null){
+          this.signedPetitionsSubscription = this.petitionService.signedPetitionSubject.subscribe(
+            (petition: Petition[]) => {
+              if (petition !== undefined ) {
+                this.signedPetitions = petition;
+                for (let i = 0 ; i < petition.length ; i++) {
+                  if (petition[i].key.name === this.idPetition) {
+                    this.alreadySigned = true;
+                  }
+                }
+              }
+            }
+          );
+          this.petitionService.emitSignedPetition();
+          this.petitionService.getPetitionSigned();
+        } else {
+          this.alreadySigned = false;
+        }
       }
     );
     this.authenticatorService.emitUserSubject();
+
+
+
   }
 
   signPetition(): void {

@@ -1,6 +1,9 @@
 import {Injectable, OnInit} from '@angular/core';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../environments/environment';
+
 
 @Injectable()
 export class AuthenticatorService {
@@ -10,7 +13,9 @@ export class AuthenticatorService {
 
   userSubject = new Subject<any>();
 
-  constructor(private authService: SocialAuthService) {
+  baseUrl = environment.server + '/_ah/api/petitionEndpoint/v1';
+
+  constructor(private httpClient: HttpClient, private authService: SocialAuthService) {
     this.authService.authState.subscribe(user => {
       this.socialUser = user;
     });
@@ -31,6 +36,7 @@ export class AuthenticatorService {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(
       response => {
         this.saveUser();
+        this.newConnection();
       }
     );
   }
@@ -65,6 +71,15 @@ export class AuthenticatorService {
   destroyUser(): void{
     this.user = null;
     localStorage.removeItem('auth');
+  }
+
+  newConnection(): void {
+    console.log('Hello from newConnection');
+    const url = this.baseUrl + '/newConnection?access_token=' + this.user.idToken;
+    console.log(url);
+    this.httpClient
+      .get<any>(url)
+      .subscribe();
   }
 
 }

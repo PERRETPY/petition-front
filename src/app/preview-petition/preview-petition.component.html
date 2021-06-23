@@ -3,6 +3,9 @@
     <h4 class="card-title">{{petition.properties.title}}</h4>
     <p class="card-text">{{petition.properties.description}}</p>
     <p class="card-text">Il y a {{petition.properties.nbSignature}} vote(s)</p>
+    <div class="card-text">
+      <a *ngFor="let tag of petition.properties.tag" routerLink="/search/{{tag}}" class="text-white bg-dark">{{ tag }}</a>
+    </div>
     <a routerLink="/petition/{{petition.key.name}}" class="card-link">Voir plus</a>
   </div>
 </div>

@@ -1,0 +1,24 @@
+<div class="container">
+
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div class="form-group">
+      <input type="text" id="query" class="form-control" name="query" ngModel required>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Rechercher</button>
+  </form>
+
+
+  <div
+    class="search-results"
+    infiniteScroll
+    [infiniteScrollDistance]="0.5"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()"
+  >
+    <div *ngFor="let petition of searchPetition">
+      <app-preview-petition [petition]="petition" class="list-petition-items"></app-preview-petition>
+    </div>
+  </div>
+
+  <h4 *ngIf="noResult">Pas de resultat !</h4>
+</div>

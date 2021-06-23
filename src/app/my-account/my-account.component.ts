@@ -11,11 +11,14 @@ import {SocialUser} from 'angularx-social-login';
 })
 export class MyAccountComponent implements OnInit {
 
-  signedPetitions: any[];
+  signedPetitions: any[] = null;
   signedPetitionsSubscription: Subscription;
+  noSignedPetitions: boolean;
 
-  myPetitions: any[];
+  myPetitions: any[] = null;
   myPetitionsSubscription: Subscription;
+  noMyPetitions: boolean;
+
 
   user: SocialUser;
   userSubscription: Subscription;
@@ -27,6 +30,11 @@ export class MyAccountComponent implements OnInit {
     this.signedPetitionsSubscription = this.petitionService.signedPetitionSubject.subscribe(
       (petition: any[]) => {
         this.signedPetitions = petition;
+        if ( this.signedPetitions == null || this.signedPetitions.length < 1 ) {
+          this.noSignedPetitions = true;
+        } else {
+          this.noSignedPetitions = false;
+        }
       }
     );
     this.petitionService.emitSignedPetition();
@@ -36,6 +44,11 @@ export class MyAccountComponent implements OnInit {
     this.myPetitionsSubscription = this.petitionService.myPetitionSubject.subscribe(
       (petition: any[]) => {
         this.myPetitions = petition;
+        if ( this.myPetitions == null || this.myPetitions.length < 1 ) {
+          this.noMyPetitions = true;
+        } else {
+          this.noMyPetitions = false;
+        }
       }
     );
     this.petitionService.emitMyPetition();
@@ -48,14 +61,7 @@ export class MyAccountComponent implements OnInit {
       }
     );
     this.authenticatorService.emitUserSubject();
-  }
 
-  getMyPetitions(): void {
-
-  }
-
-  getSignedPetitions(): void {
-    this.petitionService.getPetitionSigned();
   }
 
 }

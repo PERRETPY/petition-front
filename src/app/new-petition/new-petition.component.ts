@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PetitionPost} from '../../models/petitionPost.model';
 import {PetitionService} from '../../services/petition.service';
+import {Petition} from '../../models/petition.model';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-new-petition',
@@ -20,7 +22,8 @@ export class NewPetitionComponent implements OnInit {
   moreTags = true;
 
   constructor(private formBuilder: FormBuilder,
-              private petitionService: PetitionService) { }
+              private petitionService: PetitionService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -51,7 +54,7 @@ export class NewPetitionComponent implements OnInit {
       formValue.tags ? formValue.tags : []
     );
     this.petitionService.postPetition(newPetition);
-    console.log(this.petitionForm.controls['description'].value.length);
+    this.router.navigate(['/account/']);
   }
 
   getTags(): FormArray {

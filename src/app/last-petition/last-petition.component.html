@@ -7,8 +7,8 @@
     [infiniteScrollThrottle]="50"
     (scrolled)="onScroll()"
   >
-  <div *ngFor="let petition of top100Petition">
-    <app-preview-petition [petition]="petition" class="list-petition-items"></app-preview-petition>
-  </div>
+    <div *ngFor="let petition of top100Petition">
+      <app-preview-petition [petition]="petition" class="list-petition-items"></app-preview-petition>
+    </div>
   </div>
 </div>

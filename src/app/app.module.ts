@@ -19,9 +19,10 @@ import {
 import {AuthenticatorService} from '../services/authenticator.service';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import { NewPetitionComponent } from './new-petition/new-petition.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MyAccountComponent } from './my-account/my-account.component';
 import {AuthGuard} from '../services/auth-guard.service';
+import { SearchComponent } from './search/search.component';
 
 
 const appRoutes: Routes = [
@@ -29,6 +30,8 @@ const appRoutes: Routes = [
   { path: 'connection', component: UserConnexionComponent },
   { path: 'account', canActivate: [AuthGuard], component: MyAccountComponent },
   { path: 'new-petition', canActivate: [AuthGuard], component: NewPetitionComponent },
+  { path: 'search', component: SearchComponent },
+  { path: 'search/:query', component: SearchComponent },
   { path: '', component: HomeComponent }
 ];
 
@@ -43,7 +46,8 @@ const appRoutes: Routes = [
     HomeComponent,
     UserConnexionComponent,
     NewPetitionComponent,
-    MyAccountComponent
+    MyAccountComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +55,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     SocialLoginModule,
     InfiniteScrollModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     PetitionService,
