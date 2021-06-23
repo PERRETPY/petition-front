@@ -20,27 +20,16 @@
       <h3>Tags</h3>
       <div class="form-group" *ngFor="let tagControl of getTags().controls; let i = index">
 
-        <select id="tags" class="form-control" [formControlName]="i" multiple>
-          <option *ngFor="let tag of tags" [ngValue]="tag">
-            {{ tag }}
-          </option>
-        </select>
 
-        <button type="button" class="btn btn-danger" (click)="onDeleteTag(i)">Supprimer un tag</button>
       </div>
-      <button *ngIf="moreTags" type="button" class="btn btn-success" (click)="onAddTag()">Ajouter un tag</button>
     </div>
 
 
-    <select class="form-select" aria-label="Default select example" multiple aria-label="multiple select example">
-
-
-      <option *ngFor="let tag of tags" [ngValue]="tag">
-        {{ tag }}
+    <select formControlName="tags" multiple class="form-select" aria-label="Default select example">
+      <option *ngFor="let tag of tags" [value]="tag">
+        {{tag}}
       </option>
     </select>
-
-
 
 
     <button class="btn btn-primary" type="submit" [disabled]="petitionForm.invalid">Soumettre le formulaire</button>

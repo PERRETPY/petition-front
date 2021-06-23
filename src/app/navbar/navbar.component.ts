@@ -30,15 +30,6 @@ export class NavbarComponent implements OnInit {
   }
 
 
-  printUser(): void {
-    if (this.user != null) {
-      this.authenticatorService.refreshGoogleToken();
-      console.log(this.user);
-    }else {
-      console.log('Not connected');
-    }
-  }
-
   logOut(): void {
     this.authenticatorService.signOut();
     this.router.navigate(['/']);
